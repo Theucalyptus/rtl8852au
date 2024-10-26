@@ -657,8 +657,10 @@ uninstall:
 
 .PHONY: modules clean sign
 
-sign:
+MOK.priv MOK.der:
 	@openssl req -new -x509 -newkey rsa:2048 -keyout MOK.priv -outform DER -out MOK.der -nodes -days 36500 -subj "/CN=Custom MOK/"
+
+sign: MOK.priv MOK.der
 	@mokutil --import MOK.der
 	@$(KSRC)/scripts/sign-file sha256 MOK.priv MOK.der 8852au.ko
 
